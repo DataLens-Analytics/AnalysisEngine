@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحليل الأداء الفني والبدني لكرة اليد - Pro Elite Suite</title>
+    <title>AnalysisEngine - نظام تحليل الأداء الفني والبدني</title>
     <style>
         :root {
             --primary: #0f172a;
@@ -51,6 +51,7 @@
             border-radius: 6px;
             font-size: 14px;
             text-align: right;
+            box-sizing: border-box;
         }
         .login-card button {
             width: 100%;
@@ -172,6 +173,7 @@
             border-radius: 5px;
             font-size: 13px;
             background: #f8fafc;
+            box-sizing: border-box;
         }
 
         .action-bar {
@@ -223,6 +225,7 @@
             font-size: 12px;
             width: 190px;
             background: white;
+            box-sizing: border-box;
         }
 
         .btn-group {
@@ -443,11 +446,11 @@
 
 <div class="container">
     <header>
-        <h1>🏆 تحليل الأداء الفني والبدني لكرة اليد</h1>
+        <h1>🏆 AnalysisEngine - تحليل الأداء الفني والبدني لكرة اليد</h1>
         <p>النظام الهندسي المتقدم لإدارة وتحليل المباريات والقياسات البدنية الشاملة</p>
     </header>
 
-    <!-- شريط إدارة الأرشيف ونسخ المباريات (هستوري) -->
+    <!-- شريط إدارة الأرشيف ونسخ المباريات -->
     <div class="history-bar">
         <div class="history-controls">
             <span style="font-weight: bold; color: var(--primary); font-size: 12px;">📂 أرشيف المباريات (History):</span>
@@ -455,14 +458,14 @@
                 <option value="">-- اختر مباراة سابقة --</option>
             </select>
             <button class="btn btn-sm btn-warning" onclick="saveNewMatchToHistory()" style="color:white; font-size:11px;">💾 حفظ كنسخة مباراة جديدة</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteCurrentMatchHistory()" style="font-size:11px;">🗑️ حذف المباراة الحالية من الأرشيف</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteCurrentMatchHistory()" style="font-size:11px;">🗑️ حذف المباراة الحالية</button>
         </div>
         <div>
             <button class="btn btn-sm btn-success" onclick="exportFullHistoryJson()" style="font-size:11px;">📥 تصدير السجل بالكامل (JSON)</button>
         </div>
     </div>
 
-    <!-- شريط التنقل بين الصفحات/التابس -->
+    <!-- شريط التنقل بين التابس -->
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab('matchTab', this)">⚽ تحليل المباراة والمهارات (دفاع وهجوم ونسب)</button>
         <button class="tab-btn" onclick="switchTab('fitnessTab', this)">⚡ القياسات والاختبارات البدنية المتقدمة</button>
@@ -470,7 +473,6 @@
 
     <!-- TAB 1: Match Analysis -->
     <div id="matchTab" class="tab-content active">
-        <!-- ترويسة المشروع والمباراة -->
         <div class="match-meta-card">
             <h3 style="margin-top:0; color:var(--primary); font-size:15px;">📋 تفاصيل الحدث / المشروع الحالي</h3>
             <div class="match-meta-grid">
@@ -501,7 +503,6 @@
             </div>
         </div>
 
-        <!-- شريط الفلاتر والأزرار -->
         <div class="action-bar">
             <div class="filter-sidebar-pills">
                 <span style="font-weight: bold; color: var(--primary); align-self: center; font-size: 11.5px; margin-left: 5px;">⚡ الفلتر:</span>
@@ -629,7 +630,7 @@
         </div>
     </div>
 
-    <!-- TAB 2: Fitness & Biometrics Analysis -->
+    <!-- TAB 2: Fitness Analysis -->
     <div id="fitnessTab" class="tab-content">
         <div class="card">
             <div class="card-header">
@@ -661,11 +662,9 @@
 </div>
 
 <script>
-    // نظام حماية الملف (بيوزر نيم وباصورد)
     function checkLogin() {
         let u = document.getElementById('loginUser').value.trim();
         let p = document.getElementById('loginPass').value.trim();
-        // بيانات الدخول الافتراضية (يمكنك تعديلها هنا)
         if (u === "admin" && p === "handball2012") {
             document.getElementById('loginOverlay').style.display = 'none';
             localStorage.setItem('hb_logged_in', 'true');
@@ -675,17 +674,7 @@
         }
     }
 
-    // التحقق إذا كان المستخدم مسجل دخوله مسبقاً في الجلسة الحالية
-    window.addEventListener('DOMContentLoaded', () => {
-        if (localStorage.getItem('hb_logged_in') === 'true') {
-            document.getElementById('loginOverlay').style.display = 'none';
-        }
-        initMatchHistoryDropdown();
-    });
-
-    const availablePositions = [
-        "Pivot", "Half", "GK", "RB", "LB", "RW", "LW"
-    ];
+    const availablePositions = ["Pivot", "Half", "GK", "RB", "LB", "RW", "LW"];
 
     const defaultPlayers = [
         { number: "3", name: "ابراهيم محمود سعد الدين إبراهيم", positions: ["Half"], height: "182", weight: "78", age: 17, fat: 12.5, speed30: 4.1, jumpVert: 62, agility: 15.2, gripStrength: 42, flexibility: 6, yoyoLevel: "17.2", min: 45, g9: 2, m9: 2, g6: 2, m6: 1, g7: 1, m7: 0, ast_ok: 4, ast_no: 1, duel1v1_ok: 3, duel1v1_no: 1, def1v1_ok: 3, def1v1_no: 1, blk_ok: 1, blk_no: 0, stl_ok: 2, stl_no: 1, pos_ok: 4, pos_no: 0, selected: true },
@@ -701,7 +690,15 @@
     let goalkeepers = JSON.parse(localStorage.getItem('hb_pro_v13_gks')) || defaultGks;
     let currentQuickFilter = 'all';
 
-    // --- نظام الهِستوري (أرشيف نسخ المباريات المتعددة) ---
+    window.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem('hb_logged_in') === 'true') {
+            document.getElementById('loginOverlay').style.display = 'none';
+        }
+        initMatchHistoryDropdown();
+        loadMeta();
+        renderTables();
+    });
+
     function saveNewMatchToHistory() {
         let projName = document.getElementById('projectName').value || 'مباراة بدون عنوان';
         let oppName = document.getElementById('opponentName').value || 'خصم غير محدد';
@@ -727,6 +724,7 @@
 
     function initMatchHistoryDropdown() {
         let select = document.getElementById('matchHistorySelect');
+        if (!select) return;
         select.innerHTML = '<option value="">-- اختر مباراة سابقة --</option>';
         for (let i = 0; i < localStorage.length; i++) {
             let key = localStorage.key(i);
@@ -787,7 +785,6 @@
         a.download = `Handball_Full_Season_History.json`;
         a.click();
     }
-    // ----------------------------------------------------
 
     function switchTab(tabId, btn) {
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -797,11 +794,11 @@
     }
 
     function loadMeta() {
-        document.getElementById('projectName').value = localStorage.getItem('hb_project_name') || 'فريق 2012 - بطولة الجمهورية';
-        document.getElementById('eventType').value = localStorage.getItem('hb_event_type') || 'مباراة رسمية';
-        document.getElementById('opponentName').value = localStorage.getItem('hb_opponent') || '';
-        document.getElementById('matchDate').value = localStorage.getItem('hb_date') || '';
-        document.getElementById('matchScore').value = localStorage.getItem('hb_score') || '';
+        if(document.getElementById('projectName')) document.getElementById('projectName').value = localStorage.getItem('hb_project_name') || 'فريق 2012 - بطولة الجمهورية';
+        if(document.getElementById('eventType')) document.getElementById('eventType').value = localStorage.getItem('hb_event_type') || 'مباراة رسمية';
+        if(document.getElementById('opponentName')) document.getElementById('opponentName').value = localStorage.getItem('hb_opponent') || '';
+        if(document.getElementById('matchDate')) document.getElementById('matchDate').value = localStorage.getItem('hb_date') || '';
+        if(document.getElementById('matchScore')) document.getElementById('matchScore').value = localStorage.getItem('hb_score') || '';
     }
 
     function saveMeta() {
@@ -885,8 +882,7 @@
 
         let totalErrors = Number(p.m9||0) + Number(p.m6||0) + Number(p.m7||0) + 
                           Number(p.ast_no||0) + Number(p.duel1v1_no||0) + 
-                          Number(p.def1v1_no||0) + Number(p.blk_no||0) + Number(p.stl_no||0) + Number(p.pos_no||0) + 
-                          Number(p.to||0) + Number(p.sus||0);
+                          Number(p.def1v1_no||0) + Number(p.blk_no||0) + Number(p.stl_no||0) + Number(p.pos_no||0);
 
         let combinedAvg = (offEff + defEff) / 2;
         let baseRating = 3.0 + (combinedAvg / 100) * 7.0;
@@ -916,10 +912,11 @@
 
     function renderPlayersTable() {
         const tbody = document.getElementById('playersTableBody');
+        if (!tbody) return;
         tbody.innerHTML = '';
-        const filterVal = document.getElementById('searchInput').value.toLowerCase();
+        const searchInputEl = document.getElementById('searchInput');
+        const filterVal = searchInputEl ? searchInputEl.value.toLowerCase() : '';
 
-        let tMin=0;
         let totalRatingSum = 0;
         let totalOffEffSum = 0;
         let totalDefEffSum = 0;
@@ -936,8 +933,6 @@
             }
 
             visibleCount++;
-            tMin += Number(p.min || 0);
-
             let perf = calculatePlayerPerformance(p);
             totalRatingSum += parseFloat(perf.rating);
             totalOffEffSum += parseFloat(perf.offEff);
@@ -1036,7 +1031,6 @@
                         </div>
                     </td>
 
-                    <!-- المتوسطات والتقييم -->
                     <td class="highlight-cell" id="off-eff-${idx}">${perf.offEff}</td>
                     <td class="defense-cell" id="def-eff-${idx}">${perf.defEff}</td>
                     <td><span class="rating-badge" id="badge-${idx}" style="background-color: ${badgeColor};">${perf.rating}</span></td>
@@ -1045,13 +1039,14 @@
             tbody.innerHTML += row;
         });
 
-        document.getElementById('totOffEff').innerText = visibleCount > 0 ? (totalOffEffSum / visibleCount).toFixed(1) + '%' : '0%';
-        document.getElementById('totDefEff').innerText = visibleCount > 0 ? (totalDefEffSum / visibleCount).toFixed(1) + '%' : '0%';
-        document.getElementById('avgRating').innerText = visibleCount > 0 ? (totalRatingSum / visibleCount).toFixed(1) : '0';
+        if(document.getElementById('totOffEff')) document.getElementById('totOffEff').innerText = visibleCount > 0 ? (totalOffEffSum / visibleCount).toFixed(1) + '%' : '0%';
+        if(document.getElementById('totDefEff')) document.getElementById('totDefEff').innerText = visibleCount > 0 ? (totalDefEffSum / visibleCount).toFixed(1) + '%' : '0%';
+        if(document.getElementById('avgRating')) document.getElementById('avgRating').innerText = visibleCount > 0 ? (totalRatingSum / visibleCount).toFixed(1) : '0';
     }
 
     function renderGkTable() {
         const tbody = document.getElementById('gkTableBody');
+        if (!tbody) return;
         tbody.innerHTML = '';
         if (currentQuickFilter === 'back' || currentQuickFilter === 'front') return;
 
@@ -1121,6 +1116,7 @@
 
     function renderFitnessTable() {
         const tbody = document.getElementById('fitnessTableBody');
+        if (!tbody) return;
         tbody.innerHTML = '';
 
         players.forEach((p, idx) => {
@@ -1160,9 +1156,7 @@
         });
     }
 
-    function updateFitness(idx, field, val) {
-        players[idx][field] = val;
-    }
+    function updateFitness(idx, field, val) { players[idx][field] = val; }
 
     function toggleDropdown(event, idx) {
         event.stopPropagation();
@@ -1266,13 +1260,11 @@
         });
         renderTables();
     }
-    function deletePlayer(idx) { players.splice(idx, 1); renderTables(); }
     
     function addGk() {
         goalkeepers.push({ number: "", name: "حارس جديد", height: "190", min: 30, s9_saves: 3, g9_against: 2, s6_saves: 2, g6_against: 2, wing_saves: 2, wing_against: 1, fb_correct: 3, fb_wrong: 1, s7_saves: 0, g7_against: 1 });
         renderTables();
     }
-    function deleteGk(idx) { goalkeepers.splice(idx, 1); renderTables(); }
 
     function exportToExcel() {
         let csv = '\ufeff';
@@ -1287,7 +1279,6 @@
         players.forEach((p) => {
             let perf = calculatePlayerPerformance(p);
             let participationStatus = p.selected ? "مشارك" : "احتياطي";
-
             csv += `"${participationStatus}","${p.number || ''}","${p.name}","${p.positions.join(' - ')}",${p.min||0},${p.g9||0},${p.m9||0},${p.g6||0},${p.m6||0},${p.g7||0},${p.m7||0},${p.ast_ok||0},${p.ast_no||0},${p.duel1v1_ok||0},${p.duel1v1_no||0},${p.def1v1_ok||0},${p.def1v1_no||0},${p.blk_ok||0},${p.blk_no||0},${p.stl_ok||0},${p.stl_no||0},${p.pos_ok||0},${p.pos_no||0},${perf.offEff},${perf.defEff},${perf.rating}\n`;
         });
 
@@ -1368,9 +1359,6 @@
             renderTables();
         }
     }
-
-    loadMeta();
-    renderTables();
 </script>
 
 </body>
